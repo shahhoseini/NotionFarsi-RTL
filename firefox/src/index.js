@@ -26,10 +26,25 @@ function injectCustomFontStyles() {
         font-weight: normal;
         font-style: normal;
     }
-    .notion-page-content, .notion-table-view, .notion-board-view,
-    .notion-gallery-view, .notion-page-block, .notion-topbar, .notion-body,
-    .notion-body h1, .notion-body h2, .notion-body h3, .notion-body h4, .notion-body h5, .notion-body h6,
-    .notion-body p, .notion-body span{
+    [dir="rtl"].notion-page-content, 
+    [dir="rtl"].notion-table-view, 
+    [dir="rtl"].notion-board-view,
+    [dir="rtl"].notion-gallery-view, 
+    [dir="rtl"].notion-page-block, 
+    [dir="rtl"].notion-topbar, 
+    [dir="rtl"].notion-body,
+    [dir="rtl"].notion-body h1, 
+    [dir="rtl"].notion-body h2, 
+    [dir="rtl"].notion-body h3, 
+    [dir="rtl"].notion-body h4, 
+    [dir="rtl"].notion-body h5, 
+    [dir="rtl"].notion-body h6,
+    [dir="rtl"].notion-body p, 
+    [dir="rtl"].notion-body span,
+    [dir="rtl"].notion-bulleted_list-block,
+    [dir="rtl"].notion-selectable.notion-bulleted_list-block,
+    [dir="rtl"][contenteditable="false"][data-content-editable-leaf="true"],
+    [dir="rtl"][contenteditable="true"] {
         font-family: 'vazirmatn', sans-serif !important;
     }
     .notion-collection_view-block div[data-content-editable-void="true"] > div:nth-child(2){
@@ -51,11 +66,16 @@ function applyCustomFontToElements() {
   ).join(", ");
   const elements = document.querySelectorAll(selector);
   elements.forEach((element) => {
-    element.style.setProperty(
-      "font-family",
-      "vazirmatn, sans-serif",
-      "important"
-    );
+    // Only apply custom font if element contains RTL text
+    const hasRTLText = /[\u0600-\u06FF]/.test(element.textContent);
+    if (hasRTLText) {
+      element.setAttribute("dir", "rtl");
+      element.style.setProperty(
+        "font-family",
+        "vazirmatn, sans-serif",
+        "important"
+      );
+    }
   });
 }
 
@@ -67,6 +87,11 @@ function applyRTLToBlocks() {
     const rtlTextFound = /[\u0600-\u06FF]/.test(block.textContent);
     if (rtlTextFound) {
       block.setAttribute("dir", "rtl");
+      block.style.setProperty(
+        "font-family",
+        "vazirmatn, sans-serif",
+        "important"
+      );
     }
   });
 
